@@ -1,4 +1,4 @@
-## Interface: 20504
+## Interface: 20505
 ## Title: SwangThang Hunter Shot Timer
 ## Notes: A dynamic Auto Shot timer with latency and movement adjustments for TBC Classic.
 ## Author: chefm4tt

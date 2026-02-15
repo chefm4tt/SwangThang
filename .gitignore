@@ -1,0 +1,19 @@
+# Windows specific
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# VS Code specific
+.vscode/
+*.code-workspace
+
+# WoW / Addon specific
+*.lua.bak
+*.toc.bak
+*.wowtouch
+# Ignore the game's SavedVariables if you accidentally copy them into your dev folder
+*.lua.tmp
+
+# Personal dev files
+.history/
+.luarc.json
