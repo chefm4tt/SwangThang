@@ -1,0 +1,8 @@
+## Interface: 20504
+## Title: SwangThang Hunter Shot Timer
+## Notes: A dynamic Auto Shot timer with latency and movement adjustments for TBC Classic.
+## Author: chefm4tt
+## Version: 1.1
+## SavedVariables: HunterTimerDB
+
+SwangThang.lua
