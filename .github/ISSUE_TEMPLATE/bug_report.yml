@@ -1,0 +1,45 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in SwangThang.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened? What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Equip a ranged weapon
+        2. Fire an Auto Shot
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Addon Version
+      description: Found in the addon list in-game or the TOC file.
+      placeholder: "e.g. 1.1"
+    validations:
+      required: true
+  - type: input
+    id: wow_version
+    attributes:
+      label: WoW Client Version
+      description: Which WoW client are you using?
+      placeholder: "e.g. TBC Classic Anniversary 2.5.4"
+    validations:
+      required: false
