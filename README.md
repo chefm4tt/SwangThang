@@ -52,7 +52,13 @@ No slash commands. The frame is unlocked by default for dragging.
 
 ## 📋 Changelog
 
-### 1.1 *(Latest)*
+### 1.1.1 *(Latest)*
+
+- ✨ Updated README with standard formatting and installation path
+- 🆕 Added CI release workflow (GitHub + CurseForge)
+- 🆕 Added issue templates and PR template
+
+### 1.1
 
 - 🆕 Initial public release
 - 🆕 Dynamic swing timer with haste proc support (*Quick Shots*, *Rapid Fire*, *Dragonspine Trophy*)
