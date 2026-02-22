@@ -16,7 +16,7 @@
 
 1.  Download the `SwangThang` folder.
 2.  Place it in your AddOns directory:
-    `\World of Warcraft\_classic_\Interface\AddOns\`
+    `\World of Warcraft\_anniversary_\Interface\AddOns\`
 3.  (Optional) Ensure `SwangThang.toc` and `SwangThang.lua` are inside the folder.
 4.  Log in and start shooting!
 
