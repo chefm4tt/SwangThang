@@ -1,42 +1,62 @@
-# SwangThang Hunter Shot Timer
+# 🏹 SwangThang
 
-**SwangThang** is a specialized Auto Shot timer for Hunters in **World of Warcraft: TBC Classic**. It is built to accurately visualize the unique swing timer mechanics of the expansion, including the hidden cast window and movement penalties.
+Hunter Auto Shot timer for World of Warcraft: TBC Classic.
 
-## Features
+**SwangThang** is a specialized swing timer addon built to accurately visualize the unique Auto Shot mechanics of TBC Classic — including the hidden cast window and movement penalty retry behavior. It gives Hunters the precise timing feedback needed to maximize ranged DPS without clipping shots.
 
-*   **Dynamic Swing Calculation**: Real-time updates based on your current ranged weapon speed, accounting for procs like *Quick Shots*, *Rapid Fire*, or *Dragonspine Trophy*.
-*   **The 0.5s Cast Window**: The bar turns **Red** during the final 0.5 seconds of the swing. This represents the hidden cast time where standing still is required.
-*   **Movement Logic**:
-    *   **Green Bar**: Safe to move (Cooldown phase).
-    *   **Red Bar**: Moving here clips the shot. The timer will "pause" or reset to the start of the cast window to reflect the TBC retry mechanic.
-*   **Latency Compensation**: Automatically adjusts the start time of the swing based on your current World Latency (`GetNetStats`).
-*   **Draggable Interface**: Hold **Left Click** to drag the bar to your preferred position. The location is saved automatically.
+---
 
-## Installation
+## ✨ Key Features
 
-1.  Download the `SwangThang` folder.
-2.  Place it in your AddOns directory:
-    `\World of Warcraft\_anniversary_\Interface\AddOns\`
-3.  (Optional) Ensure `SwangThang.toc` and `SwangThang.lua` are inside the folder.
-4.  Log in and start shooting!
+- ⏱️ **Dynamic Swing Calculation** — Real-time updates based on your current ranged weapon speed, accounting for haste procs like *Quick Shots*, *Rapid Fire*, and *Dragonspine Trophy*
+- 🔴 **0.5s Cast Window** — The bar turns red during the final 0.5 seconds of the swing, signaling the hidden cast time where movement will clip the shot
+- 🟢 **Movement Logic** — Green bar means safe to move (cooldown phase); red bar means standing still is required. Moving during red triggers the TBC retry mechanic — the timer resets to the start of the cast window
+- 📡 **Latency Compensation** — Automatically adjusts swing start time based on your current World Latency (`GetNetStats`)
+- 🖱️ **Draggable Interface** — Hold Left Click to drag the bar anywhere on screen. Position is saved automatically between sessions
 
-## Usage
+---
 
-The bar is hidden by default until you fire an Auto Shot.
+## ⚙️ Installation
 
-*   **Visuals**:
-    *   **Green**: Auto Shot Cooldown.
-    *   **Red**: Auto Shot Cast (Don't move!).
-    *   **Spark**: Indicates current progress.
-*   **Reset**: The timer resets if you cast a hard-cast ability (like Aimed Shot) or if you stop attacking.
+1. Download `SwangThang.zip` from the [latest release](https://github.com/chefm4tt/SwangThang/releases/latest)
+2. Extract and place the `SwangThang` folder in your AddOns directory:
+   ```
+   World of Warcraft\_anniversary_\Interface\AddOns\SwangThang\
+   ```
+3. Log in and start shooting
 
-## Configuration
+---
 
-There are no slash commands. The frame is unlocked by default for dragging.
+## 🖥️ Usage
 
-*   **Position**: Saved in `HunterTimerDB`.
+The bar is hidden until you fire your first Auto Shot.
 
-## Technical Info
+| Color | Meaning |
+|-------|---------|
+| 🟢 Green | Auto Shot cooldown — safe to move |
+| 🔴 Red | Auto Shot cast window — **do not move** |
 
-*   **API**: Uses `UnitRangedDamage` for precise haste calculations.
-*   **Events**: Listens to `COMBAT_LOG_EVENT_UNFILTERED` for Spell ID 75 (Auto Shot).
+A spark indicator shows current progress along the bar. The timer resets if you cast a hard-cast ability (like Aimed Shot) or stop attacking.
+
+---
+
+## 🔧 Configuration
+
+No slash commands. The frame is unlocked by default for dragging.
+
+| Setting | Storage |
+|---------|---------|
+| Bar position | Saved in `HunterTimerDB` (persists across sessions) |
+
+---
+
+## 📋 Changelog
+
+### 1.1 *(Latest)*
+
+- 🆕 Initial public release
+- 🆕 Dynamic swing timer with haste proc support (*Quick Shots*, *Rapid Fire*, *Dragonspine Trophy*)
+- 🆕 0.5s cast window visualization with color-coded red/green bar
+- 🆕 Movement penalty and TBC retry mechanic simulation
+- 🆕 Latency compensation via `GetNetStats`
+- 🆕 Draggable frame with persistent position storage
