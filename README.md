@@ -1,18 +1,22 @@
-# 🏹 SwangThang
+# ⚔️ SwangThang
 
-Hunter Auto Shot timer for World of Warcraft: TBC Classic.
+Melee and ranged swing timer for World of Warcraft: TBC Classic.
 
-**SwangThang** is a specialized swing timer addon built to accurately visualize the unique Auto Shot mechanics of TBC Classic — including the hidden cast window and movement penalty retry behavior. It gives Hunters the precise timing feedback needed to maximize ranged DPS without clipping shots.
+**SwangThang** tracks your white-hit swing timers across all attack slots — main hand, off hand, and ranged — giving every physical DPS class the precise timing feedback needed to maximize damage. It handles all the quirks of TBC melee: NMA abilities, dual-wield desync, parry haste, extra attack suppression, haste rescaling, and Druid form shifts.
 
 ---
 
 ## ✨ Key Features
 
-- ⏱️ **Dynamic Swing Calculation** — Real-time updates based on your current ranged weapon speed, accounting for haste procs like *Quick Shots*, *Rapid Fire*, and *Dragonspine Trophy*
-- 🔴 **0.5s Cast Window** — The bar turns red during the final 0.5 seconds of the swing, signaling the hidden cast time where movement will clip the shot
-- 🟢 **Movement Logic** — Green bar means safe to move (cooldown phase); red bar means standing still is required. Moving during red triggers the TBC retry mechanic — the timer resets to the start of the cast window
-- 📡 **Latency Compensation** — Automatically adjusts swing start time based on your current World Latency (`GetNetStats`)
-- 🖱️ **Draggable Interface** — Hold Left Click to drag the bar anywhere on screen. Position is saved automatically between sessions
+- ⚔️ **All Melee Classes** — Warrior, Rogue, Paladin, Shaman, Druid, and Hunter all get accurate swing bars tuned to their class mechanics
+- 🏹 **Hunter Auto Shot** — Preserved from v1.x: 0.5s cast window visualization, movement penalty retry logic, and latency compensation
+- 🔄 **Dual-Wield Tracking** — Independent MH and OH timers with correct isOffHand routing; OH bar anchors below MH automatically
+- 🎯 **NMA Detection** — Heroic Strike, Cleave, Maul, and Raptor Strike reset the MH timer on cast via both CLEU and `UNIT_SPELLCAST_SUCCEEDED`
+- ⚡ **Haste Rescaling** — Remaining time rescales proportionally when weapon speed changes mid-swing (Slice and Dice, Rapid Fire, haste procs)
+- 🛡️ **Parry Haste** — Incoming parries reduce your MH remaining time by 40% of weapon speed (floored at 20%)
+- 🔀 **Extra Attack Suppression** — Sword Spec and Windfury Weapon extra attacks are absorbed cleanly without desyncing the timer
+- 🐾 **Druid Forms** — Form shifts reset the MH timer; bar label shows current form (*Cat*, *Bear*, *DireBear*, *Caster*)
+- 🔑 **Seal Twist Zone** — Ret Paladins get a gold overlay marking the 0.4s window before each MH swing for seal-twisting timing
 
 ---
 
@@ -23,36 +27,66 @@ Hunter Auto Shot timer for World of Warcraft: TBC Classic.
    ```
    World of Warcraft\_anniversary_\Interface\AddOns\SwangThang\
    ```
-3. Log in and start shooting
+3. Log in and start swinging
 
 ---
 
 ## 🖥️ Usage
 
-The bar is hidden until you fire your first Auto Shot.
+Bars appear automatically when you enter combat. The ranged bar (Hunter) also appears when auto-shot mode starts.
 
-| Color | Meaning |
-|-------|---------|
-| 🟢 Green | Auto Shot cooldown — safe to move |
-| 🔴 Red | Auto Shot cast window — **do not move** |
+| Bar | Color | Meaning |
+|-----|-------|---------|
+| Ranged | 🟢 Green | Auto Shot cooldown — safe to move |
+| Ranged | 🔴 Red | Cast window — **do not move** |
+| Main Hand | 🟡 Gold | MH swing cooldown |
+| Off Hand | 🟢 Green | OH swing cooldown |
 
-A spark indicator shows current progress along the bar. The timer resets if you cast a hard-cast ability (like Aimed Shot) or stop attacking.
+A spark indicator shows current progress. **Left-click drag** to reposition any bar. Positions persist across sessions.
+
+---
+
+## 🎮 Class Support
+
+| Class | Bars | Special |
+|-------|------|---------|
+| Hunter | Ranged + MH | 0.5s cast window, movement clipping, latency compensation |
+| Warrior | MH + OH | HS/Cleave/Slam NMA detection |
+| Rogue | MH + OH | Full dual-wield |
+| Paladin | MH | Gold seal-twist zone overlay |
+| Enhancement Shaman | MH + OH | Full dual-wield |
+| Feral Druid | MH | Form-label bar, reset on shift |
+| Mage / Priest / Warlock | — | No bars (no auto-attack rotation) |
 
 ---
 
 ## 🔧 Configuration
 
-No slash commands. The frame is unlocked by default for dragging.
+No slash commands. All settings save automatically.
 
 | Setting | Storage |
 |---------|---------|
-| Bar position | Saved in `HunterTimerDB` (persists across sessions) |
+| Bar positions | `SwangThangDB.positions` |
+| MH / OH visibility | `SwangThangDB.showMH` / `showOH` |
 
 ---
 
 ## 📋 Changelog
 
-### 1.1.1 *(Latest)*
+### 2.0 *(Latest)*
+
+- 🆕 Full melee swing timer for all physical DPS classes
+- 🆕 Dual-wield MH + OH independent tracking
+- 🆕 NMA ability detection (Heroic Strike, Cleave, Maul, Raptor Strike, Slam)
+- 🆕 Extra attack suppression (Sword Spec, Windfury Weapon)
+- 🆕 Parry haste support
+- 🆕 Haste rescaling for all melee bars
+- 🆕 Druid form-shift reset with form label
+- 🆕 Ret Paladin seal-twist zone overlay
+- 🆕 5-module architecture (Constants / State / UI / ClassMods / Bootstrap)
+- ✨ SavedVariables migrated to `SwangThangDB` (nested positions)
+
+### 1.1.1
 
 - ✨ Updated README with standard formatting and installation path
 - 🆕 Added CI release workflow (GitHub + CurseForge)
@@ -60,9 +94,9 @@ No slash commands. The frame is unlocked by default for dragging.
 
 ### 1.1
 
-- 🆕 Initial public release
-- 🆕 Dynamic swing timer with haste proc support (*Quick Shots*, *Rapid Fire*, *Dragonspine Trophy*)
-- 🆕 0.5s cast window visualization with color-coded red/green bar
+- 🆕 Initial public release — Hunter Auto Shot timer
+- 🆕 Dynamic swing timer with haste proc support
+- 🆕 0.5s cast window visualization
 - 🆕 Movement penalty and TBC retry mechanic simulation
 - 🆕 Latency compensation via `GetNetStats`
 - 🆕 Draggable frame with persistent position storage
