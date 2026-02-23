@@ -59,7 +59,12 @@ local function SetupDruid()
 	-- Show current form in the MH bar label.
 	ns.OnDruidFormChange = function(formSpellId)
 		if not ns.mhBar then return end
-		local label = ns.DRUID_FORM_IDS[formSpellId] or "Melee"
+		local label
+		if formSpellId == 0 then
+			label = "Caster"
+		else
+			label = ns.DRUID_FORM_IDS[formSpellId] or "Melee"
+		end
 		ns.mhBar._text:SetText(label)
 	end
 	ns.OnBarsCreated = function()
