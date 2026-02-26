@@ -1,9 +1,13 @@
 ## Interface: 20505
-## Title: SwangThang Hunter Shot Timer
-## Notes: A dynamic Auto Shot timer with latency and movement adjustments for TBC Classic.
+## Title: SwangThang
+## Notes: Melee and ranged swing timer for TBC Classic.
 ## Author: chefm4tt
 ## Version: @project-version@
 ## X-Curse-Project-ID: 1463182
-## SavedVariables: HunterTimerDB
+## SavedVariables: SwangThangDB HunterTimerDB
 
+SwangThang_Constants.lua
+SwangThang_State.lua
+SwangThang_UI.lua
+SwangThang_ClassMods.lua
 SwangThang.lua
