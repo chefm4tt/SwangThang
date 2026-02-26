@@ -71,6 +71,12 @@ No slash commands. All settings save automatically.
 
 ---
 
+## 💬 Feedback
+
+Found a bug? Have an idea? Open an issue on [GitHub Issues](https://github.com/chefm4tt/SwangThang/issues) — bug reports and feature requests are welcome. v2.0 is the first release with full melee support, so feedback from all class players is especially appreciated.
+
+---
+
 ## 📋 Changelog
 
 ### 2.0 *(Latest)*

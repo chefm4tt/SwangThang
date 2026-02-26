@@ -9,6 +9,6 @@ Closes #
 ## Test Plan
 
 - [ ] Loaded in-game without Lua errors
-- [ ] Timer appears and tracks Auto Shot correctly
+- [ ] Swing timer bars appear and track correctly (MH, OH, Ranged as applicable)
 - [ ] Frame drag and position save works
 - [ ] No regressions on tested behavior
