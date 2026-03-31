@@ -48,12 +48,18 @@ local function MigrateDB()
 			version   = ns.DB_DEFAULTS.version,
 			showMH    = ns.DB_DEFAULTS.showMH,
 			showOH    = ns.DB_DEFAULTS.showOH,
+			barWidth  = ns.DB_DEFAULTS.barWidth,
+			barHeight = ns.DB_DEFAULTS.barHeight,
+			colors    = {},
 			positions = {
 				mh     = { point = ns.DB_DEFAULTS.positions.mh.point,     relativePoint = ns.DB_DEFAULTS.positions.mh.relativePoint,     x = ns.DB_DEFAULTS.positions.mh.x,     y = ns.DB_DEFAULTS.positions.mh.y     },
 				oh     = { point = ns.DB_DEFAULTS.positions.oh.point,     relativePoint = ns.DB_DEFAULTS.positions.oh.relativePoint,     x = ns.DB_DEFAULTS.positions.oh.x,     y = ns.DB_DEFAULTS.positions.oh.y     },
 				ranged = { point = ns.DB_DEFAULTS.positions.ranged.point, relativePoint = ns.DB_DEFAULTS.positions.ranged.relativePoint, x = ns.DB_DEFAULTS.positions.ranged.x, y = ns.DB_DEFAULTS.positions.ranged.y },
 			},
 		}
+		for key, def in pairs(ns.DB_DEFAULTS.colors) do
+			SwangThangDB.colors[key] = { r = def.r, g = def.g, b = def.b, a = def.a }
+		end
 	end
 
 	-- Fill any missing fields for upgrades
@@ -66,6 +72,19 @@ local function MigrateDB()
 			SwangThangDB.positions[slot] = { point = def.point, relativePoint = def.relativePoint, x = def.x, y = def.y }
 		end
 	end
+
+	-- v2 → v3: bar dimensions + colors
+	if (SwangThangDB.version or 0) < 3 then
+		SwangThangDB.barWidth  = SwangThangDB.barWidth  or ns.DB_DEFAULTS.barWidth
+		SwangThangDB.barHeight = SwangThangDB.barHeight or ns.DB_DEFAULTS.barHeight
+		SwangThangDB.colors    = SwangThangDB.colors    or {}
+		for key, def in pairs(ns.DB_DEFAULTS.colors) do
+			if not SwangThangDB.colors[key] then
+				SwangThangDB.colors[key] = { r = def.r, g = def.g, b = def.b, a = def.a }
+			end
+		end
+		SwangThangDB.version = 3
+	end
 end
 
 -- ============================================================
@@ -73,6 +92,10 @@ end
 -- ============================================================
 local function OnAddonLoaded()
 	MigrateDB()
+
+	-- Apply DB dimensions to runtime constants
+	ns.BAR_WIDTH  = SwangThangDB.barWidth  or ns.DB_DEFAULTS.barWidth
+	ns.BAR_HEIGHT = SwangThangDB.barHeight or ns.DB_DEFAULTS.barHeight
 
 	-- Detect class once
 	local _, class = UnitClass("player")
@@ -84,6 +107,28 @@ local function OnAddonLoaded()
 
 	-- Create bars for this class
 	ns.InitBars()
+
+	-- Apply DB colors after bars + class mods are set up
+	ns.ApplyBarColors()
+
+	-- Create config panel (hidden)
+	ns.InitConfig()
+
+	-- Slash commands
+	SLASH_SWANGTHANG1 = "/swang"
+	SLASH_SWANGTHANG2 = "/swangthang"
+	SlashCmdList["SWANGTHANG"] = function(msg)
+		msg = strtrim(msg or ""):lower()
+		if msg == "reset" then
+			ns.ResetConfigDefaults()
+			print("|cff00ccffSwangThang:|r Settings reset to defaults.")
+		elseif msg == "help" then
+			print("|cff00ccffSwangThang:|r /swang \226\128\148 open config panel")
+			print("|cff00ccffSwangThang:|r /swang reset \226\128\148 restore default settings")
+		else
+			ns.ToggleConfig()
+		end
+	end
 end
 
 -- ============================================================

@@ -16,7 +16,8 @@ Melee and ranged swing timer for World of Warcraft: TBC Classic.
 - 🛡️ **Parry Haste** — Incoming parries reduce your MH remaining time by 40% of weapon speed (floored at 20%)
 - 🔀 **Extra Attack Suppression** — Sword Spec and Windfury Weapon extra attacks are absorbed cleanly without desyncing the timer
 - 🐾 **Druid Forms** — Form shifts reset the MH timer; bar label shows current form (*Cat*, *Bear*, *DireBear*, *Caster*)
-- 🔑 **Seal Twist Zone** — Ret Paladins get a gold overlay marking the 0.4s window before each MH swing for seal-twisting timing
+- 🔑 **Seal Twist Zone** — Ret Paladins get a cyan overlay marking the 0.4s window before each MH swing for seal-twisting timing
+- 🎨 **Customizable** — `/swang` opens a config panel to resize bars and change bar/overlay colors
 
 ---
 
@@ -35,12 +36,14 @@ Melee and ranged swing timer for World of Warcraft: TBC Classic.
 
 Bars appear automatically when you enter combat. The ranged bar (Hunter) also appears when auto-shot mode starts.
 
-| Bar | Color | Meaning |
-|-----|-------|---------|
-| Ranged | 🟢 Green | Auto Shot cooldown — safe to move |
+| Bar | Default | Meaning |
+|-----|---------|---------|
+| Ranged | ⬛ Black | Auto Shot cooldown — safe to move |
 | Ranged | 🔴 Red | Cast window — **do not move** |
-| Main Hand | 🟡 Gold | MH swing cooldown |
-| Off Hand | 🟢 Green | OH swing cooldown |
+| Main Hand | ⬛ Black | MH swing cooldown |
+| Off Hand | ⬛ Black | OH swing cooldown |
+
+All bar colors are customizable via `/swang`.
 
 A spark indicator shows current progress. **Left-click drag** to reposition any bar. Positions persist across sessions.
 
@@ -53,7 +56,7 @@ A spark indicator shows current progress. **Left-click drag** to reposition any 
 | Hunter | Ranged + MH | 0.5s cast window, movement clipping, latency compensation |
 | Warrior | MH + OH | HS/Cleave/Slam NMA detection |
 | Rogue | MH + OH | Full dual-wield |
-| Paladin | MH | Gold seal-twist zone overlay |
+| Paladin | MH | Cyan seal-twist zone overlay |
 | Enhancement Shaman | MH + OH | Full dual-wield |
 | Feral Druid | MH | Form-label bar, reset on shift |
 | Mage / Priest / Warlock | — | No bars (no auto-attack rotation) |
@@ -62,12 +65,26 @@ A spark indicator shows current progress. **Left-click drag** to reposition any 
 
 ## 🔧 Configuration
 
-No slash commands. All settings save automatically.
+Type `/swang` in chat to open the config panel. All settings save automatically.
 
-| Setting | Storage |
+| Command | Action |
+|---------|--------|
+| `/swang` | Open/close the config panel |
+| `/swang reset` | Restore all settings to defaults |
+| `/swang help` | Print available commands |
+
+**Config panel options:**
+
+| Setting | Default |
 |---------|---------|
-| Bar positions | `SwangThangDB.positions` |
-| MH / OH visibility | `SwangThangDB.showMH` / `showOH` |
+| Bar width | 200 px (range: 100–400) |
+| Bar height | 20 px (range: 10–40) |
+| Main Hand color | Black |
+| Off Hand color | Black |
+| Ranged color | Black |
+| Seal-Twist overlay | Cyan *(Paladin only)* |
+
+Bar positions are saved by **Left-click dragging** any bar.
 
 ---
 
@@ -79,7 +96,15 @@ Found a bug? Have an idea? Open an issue on [GitHub Issues](https://github.com/c
 
 ## 📋 Changelog
 
-### 2.0 *(Latest)*
+### 2.1 *(Latest)*
+
+- 🆕 `/swang` config panel — customize bar width, height, and colors
+- 🐛 Fixed seal-twist overlay invisible on MH bar (now cyan instead of gold-on-gold)
+- 🐛 Fixed bar fill not rendering due to border texture covering the fill layer
+- ✨ Slash commands: `/swang`, `/swang reset`, `/swang help`
+- ✨ 6-module architecture (added `SwangThang_Config.lua`)
+
+### 2.0
 
 - 🆕 Full melee swing timer for all physical DPS classes
 - 🆕 Dual-wield MH + OH independent tracking

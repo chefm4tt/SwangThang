@@ -7,11 +7,16 @@ local addonName, ns = ...
 -- ============================================================
 
 local function SetupRetPaladin()
-	-- Seal-twist window: gold overlay ~0.4s before swing
+	-- Seal-twist window: colored overlay ~0.4s before swing
 	ns.OnBarsCreated = function()
 		if not ns.mhBar then return end
 		local sealZone = ns.mhBar:CreateTexture(nil, "ARTWORK")
-		sealZone:SetColorTexture(1, 0.8, 0, 0.35)
+		local c = SwangThangDB and SwangThangDB.colors and SwangThangDB.colors.sealTwist
+		if c then
+			sealZone:SetColorTexture(c.r, c.g, c.b, c.a)
+		else
+			sealZone:SetColorTexture(0, 0.8, 1, 0.4)  -- cyan default
+		end
 		sealZone:SetPoint("TOPRIGHT")
 		sealZone:SetPoint("BOTTOMRIGHT")
 		sealZone:SetWidth(0)
@@ -33,12 +38,26 @@ local function SetupRetPaladin()
 end
 
 local function SetupWarrior()
-	-- Slam pending indicator: yellow bar tint and "Slam" label while
-	-- the MH timer resets and starts fresh (visual feedback only).
+	-- Slam pending indicator: yellow bar tint while the MH timer
+	-- resets and starts fresh. Restores to base color on next swing.
 	ns.OnMeleeSwing = function(slot)
 		if slot == "mh" and ns.mhBar then
-			ns.mhBar:SetStatusBarColor(0.8, 0.8, 0.1, 1)  -- yellow
+			local c = ns.mhBarBaseColor
+			if c then
+				ns.mhBar:SetStatusBarColor(c.r, c.g, c.b, c.a)
+			else
+				ns.mhBar:SetStatusBarColor(0, 0, 0, 1)
+			end
 		end
+	end
+
+	-- Hook slam cast to show yellow tint
+	local origHandleSpellcast = ns.HandleSpellcastSucceeded
+	ns.HandleSpellcastSucceeded = function(unit, castGUID, spellId)
+		if unit == "player" and ns.SLAM_IDS[spellId] and ns.mhBar then
+			ns.mhBar:SetStatusBarColor(0.8, 0.8, 0.1, 1)  -- yellow during slam
+		end
+		origHandleSpellcast(unit, castGUID, spellId)
 	end
 end
 
