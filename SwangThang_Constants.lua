@@ -70,9 +70,17 @@ ns.CLASS_CONFIG = {
 -- SavedVariables defaults
 -- ============================================================
 ns.DB_DEFAULTS = {
-	version   = 2,
+	version   = 3,
 	showMH    = true,
 	showOH    = true,
+	barWidth  = 200,
+	barHeight = 20,
+	colors = {
+		mh        = { r = 0, g = 0, b = 0, a = 1   },  -- black (matches production look)
+		oh        = { r = 0, g = 0, b = 0, a = 1   },  -- black
+		ranged    = { r = 0, g = 0, b = 0, a = 1   },  -- black
+		sealTwist = { r = 0, g = 0.8, b = 1, a = 0.4 },  -- cyan
+	},
 	positions = {
 		mh     = { point = "CENTER", relativePoint = "CENTER", x = 0, y = -120 },
 		oh     = { point = "CENTER", relativePoint = "CENTER", x = 0, y = -145 },

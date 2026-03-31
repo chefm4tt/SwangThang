@@ -10,4 +10,5 @@ SwangThang_Constants.lua
 SwangThang_State.lua
 SwangThang_UI.lua
 SwangThang_ClassMods.lua
+SwangThang_Config.lua
 SwangThang.lua

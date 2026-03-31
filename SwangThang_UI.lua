@@ -12,18 +12,37 @@ local function CreateBar(frameName, width, height)
 	f:RegisterForDrag("LeftButton")
 	f:SetClampedToScreen(true)
 	f:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
-	f:SetStatusBarColor(0, 1, 0, 1)
+	f:SetStatusBarColor(0, 0, 0, 1)
 	f:SetAlpha(0)
 
 	local bg = f:CreateTexture(nil, "BACKGROUND")
 	bg:SetAllPoints(true)
 	bg:SetColorTexture(0, 0, 0, 0.5)
 
-	local border = f:CreateTexture(nil, "OVERLAY")
-	border:SetColorTexture(0, 0, 0, 1)
-	border:SetPoint("TOPLEFT", -1, 1)
-	border:SetPoint("BOTTOMRIGHT", 1, -1)
-	border:SetDrawLayer("OVERLAY", -1)
+	-- Border: 4 thin edges so the fill remains visible
+	local borderTop = f:CreateTexture(nil, "OVERLAY")
+	borderTop:SetColorTexture(0, 0, 0, 1)
+	borderTop:SetPoint("TOPLEFT", -1, 1)
+	borderTop:SetPoint("TOPRIGHT", 1, 1)
+	borderTop:SetHeight(1)
+
+	local borderBottom = f:CreateTexture(nil, "OVERLAY")
+	borderBottom:SetColorTexture(0, 0, 0, 1)
+	borderBottom:SetPoint("BOTTOMLEFT", -1, -1)
+	borderBottom:SetPoint("BOTTOMRIGHT", 1, -1)
+	borderBottom:SetHeight(1)
+
+	local borderLeft = f:CreateTexture(nil, "OVERLAY")
+	borderLeft:SetColorTexture(0, 0, 0, 1)
+	borderLeft:SetPoint("TOPLEFT", -1, 1)
+	borderLeft:SetPoint("BOTTOMLEFT", -1, -1)
+	borderLeft:SetWidth(1)
+
+	local borderRight = f:CreateTexture(nil, "OVERLAY")
+	borderRight:SetColorTexture(0, 0, 0, 1)
+	borderRight:SetPoint("TOPRIGHT", 1, 1)
+	borderRight:SetPoint("BOTTOMRIGHT", 1, -1)
+	borderRight:SetWidth(1)
 
 	local spark = f:CreateTexture(nil, "OVERLAY")
 	spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
@@ -66,7 +85,12 @@ end
 -- ============================================================
 local function CreateMHBar()
 	local f = CreateBar("SwangThangMHBar")
-	f:SetStatusBarColor(0.8, 0.6, 0.1, 1)  -- gold
+	local c = SwangThangDB and SwangThangDB.colors and SwangThangDB.colors.mh
+	if c then
+		f:SetStatusBarColor(c.r, c.g, c.b, c.a)
+	else
+		f:SetStatusBarColor(0, 0, 0, 1)
+	end
 	f._text:SetText("Main Hand")
 	f:SetMinMaxValues(0, 1)
 	ns.mhBar = f
@@ -76,7 +100,12 @@ end
 local function CreateOHBar()
 	local mh = ns.mhBar
 	local f = CreateBar("SwangThangOHBar")
-	f:SetStatusBarColor(0.5, 0.8, 0.5, 1)  -- lighter green
+	local c = SwangThangDB and SwangThangDB.colors and SwangThangDB.colors.oh
+	if c then
+		f:SetStatusBarColor(c.r, c.g, c.b, c.a)
+	else
+		f:SetStatusBarColor(0, 0, 0, 1)
+	end
 	f._text:SetText("Off Hand")
 	f:SetMinMaxValues(0, 1)
 	-- Anchor OH below MH with 2px gap
@@ -194,7 +223,12 @@ local function UpdateRangedBar(elapsed)
 			t.lastSwing = now - (t.duration - ns.CAST_WINDOW)
 		end
 	else
-		f:SetStatusBarColor(0, 1, 0, 1)  -- green: cooldown
+		local c = ns.rangedBarBaseColor
+		if c then
+			f:SetStatusBarColor(c.r, c.g, c.b, c.a)
+		else
+			f:SetStatusBarColor(0, 0, 0, 1)
+		end
 	end
 
 	local elapsed_time = now - t.lastSwing
@@ -241,6 +275,59 @@ local function UpdateMeleeBar(slot, frame)
 	if sparkPos > frame._width then sparkPos = frame._width end
 	frame._spark:SetPoint("CENTER", frame, "LEFT", sparkPos, 0)
 	frame._text:SetText(string.format("%.1f", remaining))
+end
+
+-- ============================================================
+-- Runtime apply functions (called from config panel)
+-- ============================================================
+function ns.ApplyBarSize(width, height)
+	ns.BAR_WIDTH  = width
+	ns.BAR_HEIGHT = height
+	SwangThangDB.barWidth  = width
+	SwangThangDB.barHeight = height
+
+	local bars = { ns.mhBar, ns.ohBar, ns.rangedBar }
+	for _, bar in ipairs(bars) do
+		if bar then
+			bar:SetSize(width, height)
+			bar._width = width
+			bar._spark:SetHeight(height * 2.2)
+		end
+	end
+	-- OH anchors to MH via two-point, so width follows automatically.
+	-- Re-anchor to ensure the gap is correct after height change.
+	if ns.ohBar and ns.mhBar then
+		ns.ohBar:ClearAllPoints()
+		ns.ohBar:SetPoint("TOPLEFT", ns.mhBar, "BOTTOMLEFT", 0, -2)
+		ns.ohBar:SetPoint("TOPRIGHT", ns.mhBar, "BOTTOMRIGHT", 0, -2)
+	end
+end
+
+function ns.ApplyBarColors()
+	local colors = SwangThangDB and SwangThangDB.colors
+	if not colors then return end
+
+	-- Bars always use alpha=1; only sealTwist uses fractional alpha
+	if ns.mhBar and colors.mh then
+		local c = colors.mh
+		ns.mhBar:SetStatusBarColor(c.r, c.g, c.b, 1)
+		ns.mhBarBaseColor = { r = c.r, g = c.g, b = c.b, a = 1 }
+	end
+	if ns.ohBar and colors.oh then
+		local c = colors.oh
+		ns.ohBar:SetStatusBarColor(c.r, c.g, c.b, 1)
+	end
+	if colors.ranged then
+		local c = colors.ranged
+		ns.rangedBarBaseColor = { r = c.r, g = c.g, b = c.b, a = 1 }
+		if ns.rangedBar then
+			ns.rangedBar:SetStatusBarColor(c.r, c.g, c.b, 1)
+		end
+	end
+	if ns.sealTwistZone and colors.sealTwist then
+		local c = colors.sealTwist
+		ns.sealTwistZone:SetColorTexture(c.r, c.g, c.b, c.a or 0.4)
+	end
 end
 
 -- ============================================================
